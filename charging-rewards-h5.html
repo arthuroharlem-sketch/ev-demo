@@ -1,0 +1,370 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>家充奖励 · 测试原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&family=IBM+Plex+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#F2F4EF;--ink:#14201A;--muted:#4D5A52;--line:#C9D2CB;--card:#FFFFFF;
+  --green:#1F6B47;--green-soft:#DCEFE3;--mint:#7FE0A8;--dark:#14201A;--dark-2:#2C3B33;
+  --amber-ink:#8A4B0F;--amber-soft:#FBE7CF;--solar-soft:#FDF4E8;--disabled:#93A69A;
+  --mono:'IBM Plex Mono',ui-monospace,Menlo,monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:#DDE3DC;font-family:'Noto Sans SC','PingFang SC','Microsoft YaHei',system-ui,sans-serif;color:var(--ink);-webkit-font-smoothing:antialiased}
+.phone{max-width:430px;height:100vh;height:100dvh;margin:0 auto;background:var(--bg);display:flex;flex-direction:column;overflow:hidden;position:relative}
+@media (min-width:500px){.phone{height:844px;margin:24px auto;border-radius:28px;box-shadow:0 12px 40px rgba(20,32,26,.18)}}
+header{padding:18px 20px 12px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-size:18px;font-weight:900}
+.sub{font-size:12px;color:var(--muted)}
+.tag{font-size:11px;font-weight:700;color:var(--amber-ink);background:var(--amber-soft);padding:4px 8px;border-radius:6px;white-space:nowrap}
+main{flex:1;overflow-y:auto;padding:4px 16px 20px;-webkit-overflow-scrolling:touch}
+.stack{display:flex;flex-direction:column;gap:14px}
+.card{background:var(--card);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:12px}
+.dark{background:var(--dark);color:var(--bg)}
+.h{font-size:16px;font-weight:700}
+.note{font-size:12px;color:var(--muted);line-height:1.6}
+.mono{font-family:var(--mono)}
+.grid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.stat{background:var(--card);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:4px}
+.stat b{font-family:var(--mono);font-size:22px;font-weight:600}
+.bar{height:8px;background:var(--dark-2);border-radius:4px;overflow:hidden}
+.bar i{display:block;height:100%;background:var(--mint);border-radius:4px}
+.row{display:flex;align-items:center;gap:8px;font-size:14px;padding:10px 12px;border-radius:10px;background:#F6F8F5;border:1.5px solid transparent}
+.row.on{background:var(--green-soft);border-color:var(--green)}
+.row .n{font-weight:700;width:116px}
+.row .r{flex:1;font-size:12px;color:var(--muted)}
+.row .v{font-family:var(--mono);font-weight:600}
+label.f{display:flex;flex-direction:column;gap:6px;font-size:13px;color:var(--muted)}
+input,select{font:inherit;height:44px;border:1px solid var(--line);border-radius:10px;padding:0 12px;color:var(--ink);background:#fff;width:100%}
+select{padding:0 10px}
+input.big{height:48px;font-family:var(--mono);font-size:18px}
+button{font:inherit;cursor:pointer}
+.btn{height:52px;border:0;border-radius:14px;background:var(--green);color:#fff;font-size:16px;font-weight:700;width:100%}
+.btn.off{background:var(--disabled)}
+.btn.ghost{background:#fff;color:var(--green);border:1px solid var(--green);height:48px;font-size:15px}
+.btn.plain{background:#fff;color:var(--ink);border:1px solid var(--line)}
+.toggle{min-height:52px;display:flex;align-items:center;gap:10px;padding:0 14px;border-radius:12px;font-size:14px;color:var(--ink);border:1.5px solid var(--line);background:#fff;width:100%}
+.toggle.on{border-color:var(--green)}
+.toggle span.t{flex:1;text-align:left}
+.steps{display:flex;gap:6px}
+.steps div{flex:1;display:flex;flex-direction:column;gap:6px}
+.steps i{height:5px;border-radius:3px;background:#D3DBD5}
+.steps span{font-size:11px;color:#6B776F}
+.steps .done i{background:var(--green)}
+.steps .done span{color:var(--ink)}
+.kv{display:flex;justify-content:space-between;gap:12px;font-size:14px;padding:8px 0;border-bottom:1px solid #E6EAE5}
+.kv span:first-child{color:var(--muted)}
+.kv span:last-child{font-weight:500;text-align:right}
+.line{display:flex;justify-content:space-between;font-size:13px;color:#B9C7BE}
+.chips{display:flex;gap:8px;flex-wrap:wrap}
+.chip{height:36px;padding:0 12px;border:1px solid var(--line);border-radius:18px;background:#F6F8F5;font-size:13px;color:var(--ink)}
+.menu{height:52px;border:0;border-radius:12px;background:#fff;display:flex;align-items:center;justify-content:space-between;padding:0 16px;font-size:15px;color:var(--ink);width:100%}
+.menu span:last-child{font-size:13px;color:var(--muted)}
+.badge{font-size:12px;font-weight:700;padding:4px 8px;border-radius:6px;color:var(--amber-ink);background:#FBEEDD}
+.badge.ok{color:var(--green);background:var(--green-soft)}
+nav{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));background:#fff;border-top:1px solid #E0E5DF;padding:6px 4px calc(14px + env(safe-area-inset-bottom))}
+nav button{min-height:48px;border:0;background:transparent;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;font-size:12px;color:#5A675F}
+nav button i{width:20px;height:4px;border-radius:2px;background:transparent}
+nav button.on{color:var(--green);font-weight:700}
+nav button.on i{background:var(--green)}
+.check{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.6;color:var(--ink)}
+.check input{width:20px;height:20px;margin-top:2px;flex:none}
+.err{font-size:12px;color:#A03A2A}
+</style>
+</head>
+<body>
+<div class="phone" id="app"></div>
+
+<script>
+/* 测试原型：所有数据只在本页内计算，不发送到任何服务器。 */
+var TIERS = [
+  { name: 'T1 Starter',    lo: 0,     hi: 3000,     rate: 5 },
+  { name: 'T2 Commuter',   lo: 3000,  hi: 6000,     rate: 7 },
+  { name: 'T3 Voyageur',   lo: 6000,  hi: 12000,    rate: 9.5 },
+  { name: 'T4 Fleet',      lo: 12000, hi: 18000,    rate: 12 },
+  { name: 'T5 Mega Fleet', lo: 18000, hi: Infinity, rate: 14.5 }
+];
+/* 1.05× 起、15 人 1.50× 来自公告；中间档位为示例，待官方确认 */
+var MULTS = [
+  { name: '标准',            need: '0 人',  min: 0,  m: 1.00 },
+  { name: 'Bronze',          need: '1 人',  min: 1,  m: 1.05 },
+  { name: 'Silver（示例）',  need: '3 人',  min: 3,  m: 1.10 },
+  { name: 'Gold（示例）',    need: '5 人',  min: 5,  m: 1.20 },
+  { name: 'Diamond（示例）', need: '10 人', min: 10, m: 1.30 },
+  { name: 'Platinum VIP',    need: '15 人', min: 15, m: 1.50 }
+];
+var SOLAR_YIELD = 1150; // 多伦多粗略年发电 kWh/kW，仅供参考
+
+var S = {
+  loggedIn: true, codeSent: false, phone: '', code: '', loginErr: '', teslaLinked: false,
+  tab: 'home', step: 1, submitted: false, agree: false,
+  kwh: '8000', refs: '3',
+  utility: 'Toronto Hydro', plan: '超低夜间电价 ULO',
+  vehicle: 'Model Y', charger: 'Tesla Wall Connector（Level 2）',
+  hasSolar: true, solarKw: '8', gridMode: '净计量 Net Metering',
+  hasBattery: true, battery: 'Tesla Powerwall 3', batteryKwh: '13.5', dr: false
+};
+
+function fmt(n, d) { d = d || 0; return Number(n).toLocaleString('en-US', { minimumFractionDigits: d, maximumFractionDigits: d }); }
+function esc(s) { return String(s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+function opts(list, cur) { return list.map(function (o) { return '<option' + (o === cur ? ' selected' : '') + '>' + esc(o) + '</option>'; }).join(''); }
+
+function calc() {
+  var k = Math.max(0, parseFloat(S.kwh) || 0);
+  var refs = Math.max(0, Math.floor(parseFloat(S.refs) || 0));
+  var pts = 0, cur = TIERS[0];
+  TIERS.forEach(function (t) {
+    pts += Math.min(Math.max(k - t.lo, 0), t.hi - t.lo) * t.rate;
+    if (k >= t.lo) cur = t;
+  });
+  var mult = MULTS[0];
+  MULTS.forEach(function (m) { if (refs >= m.min) mult = m; });
+  var refCash = refs * 10;
+  var cash = pts * mult.m / 100 + refCash;
+  var next = TIERS[TIERS.indexOf(cur) + 1];
+  var pct = next ? Math.round((k - cur.lo) / (cur.hi - cur.lo) * 100) : 100;
+  return { k: k, refs: refs, pts: pts, cur: cur, mult: mult, refCash: refCash, cash: cash, next: next, pct: pct };
+}
+
+var ICON_SUN = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#B06A12" stroke-width="2" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>';
+var ICON_BAT = '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#1F6B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="16" height="10" rx="2"/><path d="M21 11v2M10 9l-2 3h4l-2 3"/></svg>';
+var ICON_OK = '<svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#1F6B47" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M8 12.5l2.5 2.5L16 9.5"/></svg>';
+var ICON_BOLT = '<svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#7FE0A8" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></svg>';
+
+function viewLogin() {
+  return '<div style="flex:1;display:flex;flex-direction:column;padding:56px 24px 28px;gap:28px;overflow-y:auto">' +
+    '<div style="display:flex;flex-direction:column;gap:10px">' +
+      '<div style="width:56px;height:56px;border-radius:16px;background:var(--dark);display:flex;align-items:center;justify-content:center">' + ICON_BOLT + '</div>' +
+      '<div style="font-size:26px;font-weight:900">[品牌名] 家充奖励</div>' +
+      '<div style="font-size:14px;color:var(--muted)">登录 / 注册，查看你的充电阶梯与奖励</div>' +
+    '</div>' +
+    '<div class="stack">' +
+      '<label class="f">手机号<div style="display:flex;gap:8px"><span style="height:48px;display:flex;align-items:center;padding:0 12px;border:1px solid var(--line);border-radius:10px;background:#fff;color:var(--ink)">+1</span>' +
+        '<input type="tel" data-bind="phone" value="' + esc(S.phone) + '" placeholder="416 000 0000" style="height:48px;font-size:16px"></div></label>' +
+      (S.codeSent ?
+        '<label class="f">短信验证码<input class="big" inputmode="numeric" data-bind="code" value="' + esc(S.code) + '" placeholder="6 位数字" style="letter-spacing:4px"></label>' +
+        '<label class="f">邀请码（选填）<input placeholder="好友的邀请码" style="height:48px"></label>' : '') +
+      (S.loginErr ? '<div class="err">' + esc(S.loginErr) + '</div>' : '') +
+      '<button class="btn" data-act="login">' + (S.codeSent ? '登录' : '获取验证码') + '</button>' +
+      '<button class="btn ghost" data-act="skipLogin">免登录，直接体验</button>' +
+      '<div class="note" style="color:var(--amber-ink);background:var(--amber-soft);border-radius:10px;padding:10px 12px">测试版：任意 10 位手机号、任意 4 位以上数字即可登录，不会发送短信。</div>' +
+    '</div>' +
+    '<div class="note" style="margin-top:auto;text-align:center">登录即表示同意《用户协议》与《隐私政策》（[链接]）<br>本应用不会要求你输入 Tesla 账号密码</div>' +
+  '</div>';
+}
+
+function viewHome(c) {
+  var rows = TIERS.map(function (t) {
+    return '<div class="row' + (t === c.cur ? ' on' : '') + '"><span class="n">' + t.name + '</span><span class="r">' +
+      (t.hi === Infinity ? '18,000+ kWh' : fmt(t.lo) + '–' + fmt(t.hi) + ' kWh') + '</span><span class="v">' + t.rate + ' pts</span></div>';
+  }).join('');
+  return '<div class="stack">' +
+    '<section class="card dark" style="border-radius:18px;padding:20px;gap:14px">' +
+      '<div style="font-size:13px;color:#B9C7BE">本年度累计充电</div>' +
+      '<div style="display:flex;align-items:baseline;gap:8px"><span class="mono" style="font-size:40px;font-weight:600">' + fmt(c.k) + '</span><span style="font-size:14px;color:#B9C7BE">kWh</span></div>' +
+      '<div style="display:flex;justify-content:space-between;font-size:13px"><span>当前阶梯：<b style="color:var(--mint)">' + c.cur.name + '</b></span><span class="mono">' + c.cur.rate + ' pts/kWh</span></div>' +
+      '<div class="bar"><i style="width:' + c.pct + '%"></i></div>' +
+      '<div style="font-size:12px;color:#B9C7BE">' + (c.next ? '再充 ' + fmt(c.next.lo - c.k) + ' kWh 升至 ' + c.next.name + '（' + c.next.rate + ' pts/kWh）' : '已达最高阶梯') + '</div>' +
+    '</section>' +
+    '<section class="grid2">' +
+      '<div class="stat"><span class="sub">预计年度奖励</span><b style="color:var(--green)">$' + fmt(c.cash, 2) + '</b></div>' +
+      '<div class="stat"><span class="sub">推荐倍率</span><b>' + c.mult.m.toFixed(2) + '×</b></div>' +
+    '</section>' +
+    '<section class="card" style="gap:10px"><div class="h" style="font-size:15px">2026 年 10 月 1 日起 · 五级阶梯</div>' + rows +
+      '<div class="note">按年度累计度数分段计算；10 月 1 日前已充度数按 5 pts 结算，但计入年度累计进度。100 pts = $1 CAD。</div></section>' +
+    '<button class="btn" data-act="goApply">开始申请 / 登记设备</button>' +
+  '</div>';
+}
+
+function viewApply() {
+  var names = ['住址', '车辆', '光伏储能', '确认'];
+  var dots = '<div class="steps">' + names.map(function (n, i) {
+    return '<div class="' + ((i + 1 <= S.step || S.submitted) ? 'done' : '') + '"><i></i><span>' + (i + 1) + ' ' + n + '</span></div>';
+  }).join('') + '</div>';
+
+  if (S.submitted) {
+    return '<div class="stack">' + dots +
+      '<section class="card" style="align-items:center;text-align:center;padding:24px">' + ICON_OK +
+        '<div style="font-size:18px;font-weight:900">测试提交成功</div>' +
+        '<div class="note" style="font-size:13px">这是原型演示，数据未发送。<br>申请编号（示例）：TEST-2026-0001</div>' +
+        '<button class="btn ghost" data-act="restart" style="width:auto;padding:0 20px">重新填写</button>' +
+      '</section></div>';
+  }
+
+  var body = '';
+  if (S.step === 1) {
+    body = '<section class="card" style="gap:14px"><div class="h">① 车主与住址</div>' +
+      '<label class="f">姓名<input placeholder="例如：王先生"></label>' +
+      '<label class="f">手机号<input type="tel" placeholder="(416) 000-0000"></label>' +
+      '<label class="f">邮编（Postal Code）<input placeholder="M2N 0A0"></label>' +
+      '<label class="f">供电公司<select data-bind="utility">' + opts(['Toronto Hydro', 'Alectra Utilities', 'Elexicon Energy', 'Oakville Hydro', '其他'], S.utility) + '</select></label>' +
+      '<label class="f">电价方案<select data-bind="plan">' + opts(['超低夜间电价 ULO', '分时电价 TOU', '阶梯电价 Tiered', '零售商合约'], S.plan) + '</select></label>' +
+    '</section>';
+  } else if (S.step === 2) {
+    body = '<section class="card" style="gap:14px"><div class="h">② 车辆与充电桩</div>' +
+      '<label class="f">车型<select data-bind="vehicle">' + opts(['Model 3', 'Model Y', 'Model S', 'Model X', 'Cybertruck'], S.vehicle) + '</select></label>' +
+      '<label class="f">车辆识别码 VIN（后 6 位）<input placeholder="例如：A12345"></label>' +
+      '<label class="f">家用充电设备<select data-bind="charger">' + opts(['Tesla Wall Connector（Level 2）', 'Mobile Connector（240V）', 'Mobile Connector（120V）', '第三方 Level 2 充电桩'], S.charger) + '</select></label>' +
+      '<div class="note" style="background:#EEF3EF;border-radius:10px;padding:10px 12px">充电数据授权方式待定（如车辆 API 只读授权）。本页不收集任何账号密码。</div>' +
+    '</section>';
+  } else if (S.step === 3) {
+    body = '<section class="card" style="gap:14px"><div class="h">③ 光伏与户用储能</div>' +
+      '<button class="toggle' + (S.hasSolar ? ' on' : '') + '" data-act="toggleSolar" style="background:' + (S.hasSolar ? 'var(--solar-soft)' : '#fff') + '">' + ICON_SUN + '<span class="t">家中装有屋顶光伏</span><b>' + (S.hasSolar ? '是' : '否') + '</b></button>' +
+      (S.hasSolar ? '<div class="stack" style="gap:12px;padding-left:4px">' +
+        '<label class="f">装机容量（kW）<input type="number" data-bind="solarKw" value="' + esc(S.solarKw) + '"></label>' +
+        '<label class="f">并网方式<select data-bind="gridMode">' + opts(['净计量 Net Metering', '纯自发自用', '离网'], S.gridMode) + '</select></label>' +
+        '<label class="f">逆变器品牌（选填）<input placeholder="例如：Tesla / Enphase / SolarEdge"></label>' +
+        '<div class="note" style="color:#6B4310;background:#FBEEDD;border-radius:10px;padding:10px 12px">粗略估算年发电约 <b class="mono">' + fmt((parseFloat(S.solarKw) || 0) * SOLAR_YIELD) + '</b> kWh（按多伦多约 1,150 kWh/kW·年，仅供参考）</div>' +
+      '</div>' : '') +
+      '<button class="toggle' + (S.hasBattery ? ' on' : '') + '" data-act="toggleBattery" style="background:' + (S.hasBattery ? '#E8F3EC' : '#fff') + '">' + ICON_BAT + '<span class="t">家中装有储能电池</span><b>' + (S.hasBattery ? '是' : '否') + '</b></button>' +
+      (S.hasBattery ? '<div class="stack" style="gap:12px;padding-left:4px">' +
+        '<label class="f">储能型号<select data-bind="battery">' + opts(['Tesla Powerwall 3', 'Tesla Powerwall 2', 'Enphase IQ Battery', '其他品牌'], S.battery) + '</select></label>' +
+        '<label class="f">可用容量（kWh）<input type="number" data-bind="batteryKwh" value="' + esc(S.batteryKwh) + '"></label>' +
+        '<label class="check" style="min-height:44px;align-items:center"><input type="checkbox" data-act="toggleDr"' + (S.dr ? ' checked' : '') + '>同意参与电网削峰 / 需求响应活动（意向登记）</label>' +
+      '</div>' : '') +
+      '<div class="note">光伏、储能信息目前仅作登记，是否计入充电奖励以正式规则为准。</div>' +
+    '</section>';
+  } else {
+    var rows = [
+      ['供电公司', S.utility], ['电价方案', S.plan], ['车型', S.vehicle], ['充电设备', S.charger],
+      ['光伏', S.hasSolar ? S.solarKw + ' kW · ' + S.gridMode : '无'],
+      ['储能', S.hasBattery ? S.battery + ' · ' + S.batteryKwh + ' kWh' : '无']
+    ].map(function (r) { return '<div class="kv"><span>' + r[0] + '</span><span>' + esc(r[1]) + '</span></div>'; }).join('');
+    body = '<section class="card"><div class="h">④ 确认信息</div>' + rows +
+      '<label class="check" style="padding-top:6px"><input type="checkbox" data-act="toggleAgree"' + (S.agree ? ' checked' : '') + '>我已阅读并同意计划条款与隐私说明（[条款链接]）</label>' +
+    '</section>';
+  }
+
+  var canNext = S.step < 4 || S.agree;
+  var nav = '<div style="display:flex;gap:10px">' +
+    (S.step > 1 ? '<button class="btn plain" data-act="prevStep" style="flex:1;height:50px;font-size:15px">上一步</button>' : '') +
+    '<button class="btn' + (canNext ? '' : ' off') + '" data-act="nextStep" style="flex:2;height:50px;font-size:15px">' + (S.step < 4 ? '下一步' : '提交测试申请') + '</button></div>';
+
+  return '<div class="stack">' + dots + body + nav + '</div>';
+}
+
+function viewCalc(c) {
+  return '<div class="stack">' +
+    '<section class="card" style="gap:14px"><div class="h">收益计算器</div>' +
+      '<label class="f">年度充电量（kWh）<input class="big" type="number" data-bind="kwh" value="' + esc(S.kwh) + '"></label>' +
+      '<label class="f">成功推荐人数（每人充满 200 kWh）<input class="big" type="number" data-bind="refs" value="' + esc(S.refs) + '"></label>' +
+      '<div class="chips">' +
+        '<button class="chip" data-act="preset" data-k="kwh" data-v="4000">通勤 4,000</button>' +
+        '<button class="chip" data-act="preset" data-k="kwh" data-v="9000">双车 9,000</button>' +
+        '<button class="chip" data-act="preset" data-k="kwh" data-v="20000">大户 20,000</button>' +
+        '<button class="chip" data-act="preset" data-k="refs" data-v="15">VIP 15 人</button>' +
+      '</div>' +
+    '</section>' +
+    '<section class="card dark" style="gap:10px">' +
+      '<div class="line"><span>阶梯积分（分段累计）</span><span class="mono">' + fmt(c.pts) + ' pts</span></div>' +
+      '<div class="line"><span>推荐倍率</span><span class="mono">× ' + c.mult.m.toFixed(2) + '</span></div>' +
+      '<div class="line"><span>拉新现金（$10 / 人）</span><span class="mono">$' + fmt(c.refCash) + '</span></div>' +
+      '<div style="height:1px;background:var(--dark-2)"></div>' +
+      '<div style="display:flex;justify-content:space-between;align-items:baseline"><span style="font-size:14px">预计年度合计</span><span class="mono" style="font-size:30px;font-weight:600;color:var(--mint)">$' + fmt(c.cash, 2) + '</span></div>' +
+      '<div class="line" style="font-size:12px"><span>折合每度电</span><span class="mono">$' + (c.k > 0 ? (c.cash / c.k).toFixed(4) : '0.0000') + ' / kWh</span></div>' +
+      '<div class="line" style="font-size:12px"><span>旧政策（5 pts 固定）</span><span class="mono">$' + fmt(c.k * 5 / 100, 2) + '</span></div>' +
+    '</section>' +
+    '<div class="note">计算按年度累计分段：每段度数 × 该段单价，再乘推荐倍率。中间倍率档位为示例，待官方确认。</div>' +
+  '</div>';
+}
+
+function viewInvite(c) {
+  var rows = MULTS.slice(1).map(function (m) {
+    return '<div class="row' + (m === c.mult ? ' on' : '') + '"><span style="flex:1;font-weight:500">' + m.name + '</span><span class="r" style="flex:none;width:80px">' + m.need + '</span><span class="v" style="width:52px;text-align:right">' + m.m.toFixed(2) + '×</span></div>';
+  }).join('');
+  return '<div class="stack">' +
+    '<section class="card"><div class="h">邀请好友 · 双方各得 $10</div>' +
+      '<div class="note" style="font-size:13px">好友加入并累计充电满 200 kWh 后，双方各得 1,000 pts。推荐越多，倍率越高。</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;background:#F6F8F5;border:1px dashed #9FB3A6;border-radius:12px;padding:12px">' +
+        '<span class="mono" style="flex:1;font-size:14px">[邀请链接]/r/TEST01</span>' +
+        '<button data-act="copy" style="height:40px;padding:0 14px;border:0;border-radius:10px;background:var(--green);color:#fff;font-weight:700">' + (S.copied ? '已复制' : '复制') + '</button>' +
+      '</div></section>' +
+    '<section class="card" style="gap:8px"><div class="h" style="font-size:15px">倍率等级</div>' + rows +
+      '<div class="note" style="color:var(--amber-ink)">* 1.05× 起、15 人达 1.50× 为公告信息；中间档位为示例。</div></section>' +
+  '</div>';
+}
+
+function viewMine() {
+  var digits = S.phone.replace(/\D/g, '');
+  var menu = [['充电记录', '按月'], ['积分与提现', '100 pts = $1'], ['我的设备', '车 / 光伏 / 储能'], ['电价方案', S.plan], ['常见问题', ''], ['联系客服', '']]
+    .map(function (m) { return '<button class="menu"><span>' + m[0] + '</span><span>' + esc(m[1]) + ' ›</span></button>'; }).join('');
+  return '<div class="stack" style="gap:10px">' +
+    '<section class="card" style="flex-direction:row;align-items:center;gap:14px">' +
+      '<div style="width:52px;height:52px;border-radius:26px;background:#D7E6DC;display:flex;align-items:center;justify-content:center;font-weight:900;color:var(--green)">测</div>' +
+      '<div><div style="font-size:16px;font-weight:700">测试用户 · ' + (digits.length >= 4 ? '尾号 ' + digits.slice(-4) : '体验模式') + '</div>' +
+      '<div class="sub">' + esc(S.vehicle) + ' · ' + esc(S.utility) + '</div></div>' +
+    '</section>' +
+    '<section class="card" style="padding:16px;gap:10px">' +
+      '<div style="display:flex;align-items:center;justify-content:space-between"><span class="h" style="font-size:15px">Tesla 账号</span><span class="badge' + (S.teslaLinked ? ' ok' : '') + '">' + (S.teslaLinked ? '已连接（示例）' : '未连接') + '</span></div>' +
+      '<div class="note">将跳转到 Tesla 官方页面授权只读充电数据，本应用不接触你的密码，可随时在 Tesla 账号中撤销。</div>' +
+      '<button class="btn ghost" data-act="toggleTesla" style="height:44px;font-size:14px">' + (S.teslaLinked ? '解除连接' : '前往 Tesla 官方授权') + '</button>' +
+    '</section>' + menu +
+    '<button data-act="logout" style="height:48px;border:0;border-radius:12px;background:transparent;color:#A03A2A;font-size:15px;font-weight:700">退出登录</button>' +
+  '</div>';
+}
+
+function render() {
+  var app = document.getElementById('app');
+  var scroll = app.querySelector('main') ? app.querySelector('main').scrollTop : 0;
+  if (!S.loggedIn) { app.innerHTML = viewLogin(); return; }
+  var c = calc();
+  var views = { home: viewHome, apply: viewApply, calc: viewCalc, invite: viewInvite, mine: viewMine };
+  var tabs = [['home', '首页'], ['apply', '申请'], ['calc', '计算'], ['invite', '邀请'], ['mine', '我的']];
+  app.innerHTML =
+    '<header><div><div class="brand">[品牌名] 家充奖励</div><div class="sub">大多伦多地区 · 2026 年度计划</div></div><div class="tag">测试版 · 不提交数据</div></header>' +
+    '<main>' + views[S.tab](c) + '</main>' +
+    '<nav>' + tabs.map(function (t) {
+      return '<button data-act="tab" data-v="' + t[0] + '" class="' + (S.tab === t[0] ? 'on' : '') + '"><i></i><span>' + t[1] + '</span></button>';
+    }).join('') + '</nav>';
+  if (S._keepScroll) app.querySelector('main').scrollTop = scroll;
+  S._keepScroll = false;
+}
+
+var ACTIONS = {
+  tab: function (el) { S.tab = el.dataset.v; S.copied = false; },
+  goApply: function () { S.tab = 'apply'; },
+  login: function () {
+    var p = S.phone.replace(/\D/g, ''), cd = S.code.replace(/\D/g, '');
+    if (!S.codeSent) { if (p.length < 10) { S.loginErr = '请输入 10 位手机号'; return; } S.codeSent = true; S.loginErr = ''; }
+    else { if (cd.length < 4) { S.loginErr = '请输入验证码'; return; } S.loggedIn = true; S.tab = 'home'; S.loginErr = ''; }
+  },
+  skipLogin: function () { S.loggedIn = true; S.tab = 'home'; },
+  logout: function () { S.loggedIn = false; S.codeSent = false; S.code = ''; S.tab = 'home'; },
+  toggleTesla: function () { S.teslaLinked = !S.teslaLinked; S._keepScroll = true; },
+  toggleSolar: function () { S.hasSolar = !S.hasSolar; S._keepScroll = true; },
+  toggleBattery: function () { S.hasBattery = !S.hasBattery; S._keepScroll = true; },
+  toggleDr: function () { S.dr = !S.dr; S._keepScroll = true; },
+  toggleAgree: function () { S.agree = !S.agree; S._keepScroll = true; },
+  prevStep: function () { S.step = Math.max(1, S.step - 1); },
+  nextStep: function () { if (S.step < 4) S.step++; else if (S.agree) S.submitted = true; },
+  restart: function () { S.step = 1; S.submitted = false; S.agree = false; },
+  preset: function (el) { S[el.dataset.k] = el.dataset.v; S._keepScroll = true; },
+  copy: function () { S.copied = true; try { navigator.clipboard.writeText('[邀请链接]/r/TEST01'); } catch (e) {} }
+};
+
+document.addEventListener('click', function (e) {
+  var el = e.target.closest('[data-act]');
+  if (!el || !ACTIONS[el.dataset.act]) return;
+  ACTIONS[el.dataset.act](el);
+  render();
+});
+/* 输入时只存值；离开输入框或选择后再重新计算，避免打字时光标跳动 */
+document.addEventListener('input', function (e) {
+  var k = e.target.dataset && e.target.dataset.bind;
+  if (k) S[k] = e.target.value;
+});
+document.addEventListener('change', function (e) {
+  var k = e.target.dataset && e.target.dataset.bind;
+  if (!k || k === 'phone' || k === 'code') return;
+  S[k] = e.target.value; S._keepScroll = true; render();
+});
+
+render();
+</script>
+</body>
+</html>
